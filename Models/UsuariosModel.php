@@ -37,6 +37,12 @@ class UsuariosModel extends Query
         return $this->selectAll($sql);
     }
 
+    public function getUsuario($id)
+    {
+        $sql = "SELECT id,nombre,apellido,correo,telefono,direccion,clave,rol,perfil,fecha FROM usuarios WHERE id = $id";
+        return $this->select($sql);
+    }
+
     public function delete($id)
     {
         $sql = "UPDATE usuarios SET estado = ? WHERE id = ?";
@@ -55,5 +61,12 @@ class UsuariosModel extends Query
     {
         $sql = "SELECT count(id) AS total FROM detalle_archivos WHERE correo = '$correo' AND estado = 1";
         return $this->select($sql);
+    }
+
+    public function cambiarPass($clave, $id)
+    {
+        $sql = ("UPDATE usuarios SET clave = ? WHERE id = ?");
+        $datos = array($clave, $id);
+        return $this->save($sql, $datos);
     }
 }

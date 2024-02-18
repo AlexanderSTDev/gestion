@@ -88,4 +88,17 @@ class AdminModel extends Query
         $sql = "SELECT count(id) AS total FROM detalle_archivos WHERE correo = '$correo' AND estado = 1";
         return $this->select($sql);
     }
+    // Eliminar archivos de forma permanente
+    public function getConsultar()
+    {
+        $sql = "SELECT * FROM archivos WHERE estado = 0";
+        return $this->selectAll($sql);
+    }
+
+    public function eliminarRegistro($id_archivo)
+    {
+        $sql = "DELETE FROM archivos WHERE id = ?";
+        $datos = array($id_archivo);
+        return $this->save($sql, $datos);
+    }
 }

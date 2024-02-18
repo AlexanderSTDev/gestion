@@ -16,8 +16,8 @@ class Archivos extends Controller
         $data['title'] = "Archivos";
         $data['active'] = "Todos";
         $data['script'] = "files.js";
-        $data['menu'] = '';
-        $data['archivos'] = $this->model->getArchivos($this->id_usuario);
+        $data['menu'] = 'admin';
+        $data['archivos'] = $this->model->getArchivos(1, $this->id_usuario);
 
         $carpetas = $this->model->getCarpetas($this->id_usuario);
         for ($i = 0; $i < count($carpetas); $i++) {
@@ -90,7 +90,7 @@ class Archivos extends Controller
     {
         $fecha = date('Y-m-d H:i:s');
         $nueva = date('Y-m-d H:i:s', strtotime($fecha . ' + 1 month'));
-        $data = $this->model->eliminar($nueva, $id);
+        $data = $this->model->eliminar(0, $nueva, $id);
         if ($data == 1) {
             $res = array('tipo' => 'success', 'mensaje' => 'Archivo eliminado con exito');
         } else {
@@ -120,6 +120,39 @@ class Archivos extends Controller
     {
         $data = $this->model->getBusqueda($valor, $this->id_usuario);
         echo json_encode($data, JSON_UNESCAPED_UNICODE);
+        die();
+    }
+
+    public function recicle()
+    {
+        $data['title'] = "Archivos Eliminados";
+        $data['active'] = "Eliminar";
+        $data['menu'] = "admin";
+        $data['script'] = "deleted.js";
+
+        $data['shares'] = $this->model->verificarEstado($this->correo);
+        $this->views->getView('archivos', 'deleted', $data);
+    }
+
+    public function listarHistorial()
+    {
+        $data = $this->model->getArchivos(0, $this->id_usuario);
+        for ($i = 0; $i < count($data); $i++) {
+            $data[$i]['accion'] = '<a href="#" class="btn btn-outline-danger btn-sm" onclick="restaurar(' . $data[$i]['id'] . ')" title="Editar">Restaurar</a>';
+        }
+        echo json_encode($data, JSON_UNESCAPED_UNICODE);
+        die();
+    }
+
+    public function deleted($id)
+    {
+        $data = $this->model->eliminar(1, null, $id);
+        if ($data == 1) {
+            $res = array('tipo' => 'success', 'mensaje' => 'Archivo restaurado con exito');
+        } else {
+            $res = array('tipo' => 'error', 'mensaje' => 'Error al restaurar archivo');
+        }
+        echo json_encode($res, JSON_UNESCAPED_UNICODE);
         die();
     }
 }

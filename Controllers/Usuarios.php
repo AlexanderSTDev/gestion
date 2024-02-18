@@ -112,4 +112,48 @@ class Usuarios extends Controller
         echo json_encode($data, JSON_UNESCAPED_UNICODE);
         die();
     }
+
+    public function profile()
+    {
+        $data['title'] = "Perfil del usuario";
+        $data['script'] = "profile.js";
+        $data['menu'] = "usuarios";
+        $data['shares'] = $this->model->verificarEstado($this->correo);
+        $this->views->getView('usuarios', 'perfil', $data);
+    }
+
+    public function cambiarPass()
+    {
+        $actual = $_POST['clave_actual'];
+        $nueva = $_POST['clave_nueva'];
+        $confirmar = $_POST['clave_confirmar'];
+        if (empty($actual) || empty($nueva) || empty($confirmar)) {
+            $res = array('tipo' => 'warning', 'mensaje' => 'Todos los campos son requeridos por favor');
+        } else {
+            if ($nueva != $confirmar) {
+                $res = array('tipo' => 'warning', 'mensaje' => 'Las contrasañas no coinciden');
+            } else {
+                $consulta = $this->model->getUsuario($this->id_usuario);
+                if (password_verify($actual, $consulta['clave'])) {
+                    $hash = password_hash($nueva, PASSWORD_DEFAULT);
+                    $data = $this->model->cambiarPass($hash, $this->id_usuario);
+                    if ($data == 1) {
+                        $res = array('tipo' => 'success', 'mensaje' => 'Contrasena modificada');
+                    } else {
+                        $res = array('tipo' => 'error', 'mensaje' => 'Error al modificar contrasena');
+                    }
+                } else {
+                    $res = array('tipo' => 'warning', 'mensaje' => 'La contrasena actual no coincide');
+                }
+            }
+        }
+        echo json_encode($res, JSON_UNESCAPED_UNICODE);
+        die();
+    }
+
+    public function salir()
+    {
+        session_destroy();
+        header("Location: " . BASE_URL);
+    }
 }
