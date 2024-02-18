@@ -1,8 +1,8 @@
 const frm = document.getElementById('formulario');
 const btnNuevo = document.getElementById('btnNuevo');
 const title = document.getElementById('title');
-const modalRegistro = document.getElementById('modalRegistro');
 // levantar el modal
+const modalRegistro = document.getElementById('modalRegistro');
 const myModal = new bootstrap.Modal(modalRegistro);
 
 let tblUsuarios;

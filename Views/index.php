@@ -61,15 +61,30 @@
 
                 <div class="auth-submit">
                     <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
-                    <a href="#" class="auth-forgot-password float-end">¿Has olvidado tu contraseña?</a>
+                    <a href="#" class="auth-forgot-password float-end" id="reset">¿Has olvidado tu contraseña?</a>
                 </div>
             </form>
-            <!-- <div class="divider"></div>
-            <div class="auth-alts">
-                <a href="#" class="auth-alts-google"></a>
-                <a href="#" class="auth-alts-facebook"></a>
-                <a href="#" class="auth-alts-twitter"></a>
-            </div> -->
+        </div>
+    </div>
+
+    <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="my-modal-title" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Olvidaste tu contraseña?</h5>
+                    <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <label for="inputReset" class="form-label">Ingresa tu correo electronico></label>
+                    <input type="text" class="form-control" id="inputReset" name="inputReset" placeholder="example@neptune.com">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-outline-primary" id="resetPassword">Enviar</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -80,6 +95,7 @@
     <script src="<?php echo BASE_URL; ?>Assets/plugins/pace/pace.min.js"></script>
     <script src="<?php echo BASE_URL; ?>Assets/js/sweetalert2@11.js"></script>
     <!-- <script src="<?php echo BASE_URL; ?>Assets/js/main.min.js"></script> -->
+    <!-- <script src="<?php echo BASE_URL; ?>Assets/js/alertas.js"></script> -->
     <script src="<?php echo BASE_URL; ?>Assets/js/custom.js"></script>
     <script>
         const base_url = <?php echo json_encode(BASE_URL); ?>

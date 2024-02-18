@@ -8,6 +8,11 @@ class Admin extends Controller
         session_start();
         $this->id_usuario = $_SESSION['id'];
         $this->correo = $_SESSION['correo'];
+        // Validad sesion
+        if (empty($_SESSION['id'])) {
+            header('Location: ' . BASE_URL);
+            exit;
+        }
 
         // Eliminar archivos de forma permanente
         $fecha = date('Y-m-d H:i:s');

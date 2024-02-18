@@ -9,6 +9,10 @@ class Archivos extends Controller
         // id del usuario logueado
         $this->id_usuario = $_SESSION['id'];
         $this->correo = $_SESSION['correo'];
+        if (empty($_SESSION['id'])) {
+            header('Location: ' . BASE_URL);
+            exit;
+        }
     }
 
     public function index()

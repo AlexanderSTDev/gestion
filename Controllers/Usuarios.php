@@ -8,6 +8,10 @@ class Usuarios extends Controller
         session_start();
         $this->id_usuario = $_SESSION['id'];
         $this->correo = $_SESSION['correo'];
+        if (empty($_SESSION['id'])) {
+            header('Location: ' . BASE_URL);
+            exit;
+        }
     }
 
     public function index()
@@ -118,6 +122,7 @@ class Usuarios extends Controller
         $data['title'] = "Perfil del usuario";
         $data['script'] = "profile.js";
         $data['menu'] = "usuarios";
+        $data['usuario'] = $this->model->getUsuario($this->id_usuario);
         $data['shares'] = $this->model->verificarEstado($this->correo);
         $this->views->getView('usuarios', 'perfil', $data);
     }
@@ -145,6 +150,28 @@ class Usuarios extends Controller
                 } else {
                     $res = array('tipo' => 'warning', 'mensaje' => 'La contrasena actual no coincide');
                 }
+            }
+        }
+        echo json_encode($res, JSON_UNESCAPED_UNICODE);
+        die();
+    }
+
+    public function cambiarProfile()
+    {
+        $correo = $_POST['correo'];
+        $nombre = $_POST['nombre'];
+        $apellido = $_POST['apellido'];
+        $telefono = $_POST['telefono'];
+        $direccion = $_POST['direccion'];
+        if (empty($correo) || empty($nombre) || empty($apellido) || empty($telefono) || empty($direccion)) {
+            $res = array('tipo' => 'warning', 'mensaje' => 'Todos los campos son requeridos por favor');
+        } else {
+            $usuario = $this->model->getUsuario($this->id_usuario);
+            $data = $this->model->modificar($nombre, $apellido, $correo, $telefono, $direccion, $usuario['rol'], $this->id_usuario);
+            if ($data == 1) {
+                $res = array('tipo' => 'success', 'mensaje' => 'Datos modificadas');
+            } else {
+                $res = array('tipo' => 'error', 'mensaje' => 'Error al modificar datos');
             }
         }
         echo json_encode($res, JSON_UNESCAPED_UNICODE);
