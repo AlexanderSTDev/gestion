@@ -44,6 +44,9 @@ const content_acordeon = document.querySelector('#accordionFlushExample')
 // Eliminar archivos recientes
 const eliminar = document.querySelectorAll('.eliminar');
 
+// Barra de progreso
+let container_progress = document.getElementById('container_progress');
+
 document.addEventListener('DOMContentLoaded', () => {
 
     btnUpload.addEventListener('click', () => {
@@ -95,17 +98,25 @@ document.addEventListener('DOMContentLoaded', () => {
         const url = base_url + 'admin/subirArchivo';
         http.open("POST", url, true);
         http.send(data);
+        http.upload.addEventListener('progress', (e) => {
+            let porcentaje = (e.loaded * 100) / e.total;
+            container_progress.innerHTML = `
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" style="width: ${porcentaje.toFixed(0)}%;" aria-valuenow="${porcentaje.toFixed(0)}" aria-valuemin="0" aria-valuemax="100">${porcentaje.toFixed(0)}%</div>
+                </div>
+            `;
+        });
+        http.addEventListener('load', (e) => {
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000);
+        })
         http.onreadystatechange = function () {
 
             if (this.readyState == 4 && this.status == 200) {
                 // console.log(this.responseText);
                 const res = JSON.parse(this.responseText);
                 alertaPersonalizada(res.tipo, res.mensaje);
-                if (res.tipo == 'success') {
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 1500);
-                }
             }
         };
     });

@@ -16,9 +16,7 @@
                     </div>
                 </div>
             </div>
-            <div class="section-description">
-                <h1>Grupos de Carpetas</h1>
-            </div>
+            <div id="container_progress" class="mb-3"></div>
             <div class="row">
                 <?php foreach ($data['carpetas'] as $carpeta) { ?>
                     <div class="col-md-4">
